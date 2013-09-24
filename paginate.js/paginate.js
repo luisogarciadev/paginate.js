@@ -32,7 +32,7 @@ $.fn.paginate = function(options) {
             }
             $pager.appendTo(settings.paginatorSelector).find('li.page-number:nth-child(' + (settings.currentPage + 3) + ')').addClass('active');
             $('<li class="next-paginator"><a href="#">></a></li><li class="last-paginator"><a href="#">&raquo;</a></li>').appendTo($pager);
-            ;
+
             $('.first-paginator').click(function() {
                 if (settings.currentPage !== 0) {
                     settings.currentPage = 0;
@@ -74,18 +74,19 @@ $.fn.paginate = function(options) {
     });
 
     function ShowPagesToDisplay(numPages) {
-        pageOffset = Math.floor(settings.pagesToDisplay / 2);
-        startPage = Math.floor((settings.currentPage - pageOffset) < 0 ? 0 : (settings.currentPage - pageOffset));
-        endPage = startPage + settings.pagesToDisplay;
+        if (numPages > settings.pagesToDisplay) {
+            pageOffset = Math.floor(settings.pagesToDisplay / 2);
+            startPage = Math.floor((settings.currentPage - pageOffset) < 0 ? 0 : (settings.currentPage - pageOffset));
+            endPage = startPage + settings.pagesToDisplay;
 
-        if (endPage + pageOffset > numPages) {
-            startPage = startPage - (endPage - numPages);
-            endPage = numPages;
+            if (endPage + pageOffset > numPages) {
+                startPage = startPage - (endPage - numPages);
+                endPage = numPages;
+            }
+
+            $('ul.pagination').find('li.page-number').hide().slice(startPage, endPage).show();
         }
-
         CheckIfDisableNavElements(numPages);
-
-        $('ul.pagination').find('li.page-number').hide().slice(startPage, endPage).show();
     }
     function CheckIfDisableNavElements(numPages) {
         if (settings.currentPage === 0) {
